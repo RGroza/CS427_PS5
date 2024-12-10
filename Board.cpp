@@ -1,5 +1,5 @@
-#include "Board.hpp"
 #include <iostream>
+#include "Board.hpp"
 
 Board::Board(int h, int s, Player& north, Player& south) : numHouses(h), numSeeds(s) {
     pitWarehouse = make_unique<Pit[]>(2 * h + 2);

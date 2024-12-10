@@ -1,8 +1,6 @@
 #include "Snapshot.hpp"
 #include "Kalah.hpp"
 #include "tools.hpp"
-#include <ostream>
-#include <iostream>
 
 Snapshot::Snapshot(istream& in, int houses, char label) :
         activePlayer((label == 'N') ? Side::North : Side::South,

@@ -1,18 +1,19 @@
-#include "Kalah.hpp"
 #include <iostream>
+#include "Kalah.hpp"
 
 Kalah::Kalah(int h, int s) : numHouses(h), numSeeds(s),
-                             north(Side::North, "North", 'N', h * s), south(Side::South, "South", 'S', h * s),
+                             north(Side::North, "North", 'N', h * s),
+                             south(Side::South, "South", 'S', h * s),
                              bd(h, s, north, south), currentPlayer(south),
                              gameOver(false), gameOutcome(Outcome::Undetermined) {}
 
 bool Kalah::isValidMove(int move) {
     if (move <= 0 || move > numHouses) {
-        cout << "Chosen house number " << move << " is invalid\nBad input -- please try again" << endl;
+        throw InvalidHouseNumber(move);
         return false;
     }
     if (bd.isHouseEmpty(currentPlayer, move)) {
-        cout << "Can't choose an empty pit\nBad input -- please try again" << endl;
+        throw InvalidEmptyPit(move);
         return false;
     }
     return true;
@@ -124,9 +125,6 @@ void Kalah::restoreState(const Snapshot& ss) {
         north.houseSeeds += seeds.at(i);
     }
     north.storeSeeds = seeds.at(2 * numHouses + 1);
-
-    printf("North: %d %d\n", north.houseSeeds, north.storeSeeds);
-    printf("South: %d %d\n", south.houseSeeds, south.storeSeeds);
 
     bd.restoreSeedsState(seeds);
 }

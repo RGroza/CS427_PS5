@@ -1,5 +1,7 @@
 #pragma once
 #include "Game.hpp"
+#include "Exception.hpp"
+#include "tools.hpp"
 
 using namespace std;
 

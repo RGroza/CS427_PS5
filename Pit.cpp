@@ -1,3 +1,4 @@
+#include <iomanip>
 #include "Pit.hpp"
 
 Pit::Pit() : owner(nullptr), number(0), seeds(0), label(""), next(nullptr), opposite(nullptr) {}

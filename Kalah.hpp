@@ -2,6 +2,7 @@
 #include "Board.hpp"
 #include "Player.hpp"
 #include "Snapshot.hpp"
+#include "Exception.hpp"
 
 using namespace std;
 

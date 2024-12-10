@@ -1,10 +1,9 @@
 #pragma once
-#include <iostream>
 #include <sstream>
 #include <string>
-#include <vector>
 #include "Kalah.hpp"
 #include "Snapshot.hpp"
+#include "Exception.hpp"
 
 using namespace std;
 
@@ -16,6 +15,6 @@ public:
     Game(int numHouses, int numSeeds);
     void doMove(string token);
     void playGame(istringstream* iss);
-    void saveState();
+    void saveState() const;
     void restoreState(const Snapshot& ss);
 };

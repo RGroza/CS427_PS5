@@ -1,51 +1,47 @@
-Kalah.cpp Kalah.hpp:
-    - isValidMove():
-        - Checks if chose move integer is > 0 and < numHouses
-        - Checks if chosen house is empty
-    - doMove():
-        - Removes seeds from the chosen house and sows seeds CCW around the board
-        - Checks for condition to capture opponent's seeds
-        - Checks if one of the players has run out of seeds for end game condition
-        - Checks whether the current player has another turn or not
-    - showBoard():
-        - Prints out the current state of game -- the current turn and board composition
-    - endGame():
-        - Transfers all the seeds from the player's houses to their store
-        - Sets the game outcome to NorthWin, SouthWin, or Tie
-    - isGameOver():
-        - Used by Game.cpp to query if the game is over
-    - getGameOutcome():
-        - Returns the outcome
-    - operator<<():
-        - Prints the players' current amount of seeds in their stores
+Exception.hpp:
+    - Added exception class heirarchies for both Kalah and Game:
+        - KalahIllegalMove is the base class for Kalah exceptions:
+            - InvalidHouseNumber and InvalidEmptyPit are derived classes for specific
+              Kalah exceptions
+        - GameException is the base class for Game exceptions:
+            - LostConnection, LowLevelStreamError, and Quit are derived classes for
+              specific Game exceptions
+    - Uses virtual print() function from base class that each of the derived classes
+      override with their own implementation
 
+Snapshot.hpp/Snapshot.cpp:
+    - print() function redirects to "ostream& out" to "kalah.state" file
+    - read() parses the remaining integers of the file representing each pit on the
+      Kalah board adding them to a "vector<int>" list
 
-Game.cpp Game.hpp:
-    - doMove():
-        - Checks if the token is "q" for quiting the game
-        - Uses try-catch to convert token into move integer
-        - Calls Kalah::doMove() to process the move integer
+Startup.hpp/Startup.cpp:
+    - Parses the arguments, checking that the correct number and type of arguments
+      are given
+    - Reads the first two tokens in the "kalah.state" file to retrieve the number of
+      houses and the current active player (if "-r" argument is present)
+
+Game.cpp:
     - playGame():
-        - Receives an istringstream (iss) pointer from main
-        - If "iss" is a nullptr:
-            - Expect user input from cin
-            - Read line of input from cin and use istringstream to process tokens
-        - If "iss" is not null:
-            - Process individual tokens seperated by whitespace as move commands
-        - After each move, the function queries Kalah::isGameOver() to check if the game
-          is over
-        - Prints out end game message stating which player won the game (or a tie)
+        - throws exceptions for low-level stream errors
+        - catches both Kalah and Game specific errors, calling their print functions
+    - saveState():
+        - creates the Snapshot object
+        - create the output file "kalah.state"
+        - catches any fatal errors during saving
+    - restoreState():
+        - calls Kalah::restoreState()
+        - catches any fatal errors during restoring
 
+Kalah.cpp:
+    - isValidMove(): throws exceptions for invalid input errors
+    - saveState():
+        - sets the Snapshot activePlayer
+        - calls Board::saveSeedsState()
+    - restoreState():
+        - sets the currentPlayer
+        - sets each player's house and store seed counts
+        - calls Board::restoreSeedState() to set up the board pits
 
-Board.cpp Board.hpp:
-    - Implements functions for querying number of seeds in each pit and for adding,
-      removing, and transfering seeds.
-    - captureOppositePit():
-        - Removes seeds from current pit and opposite pit, transfering them to the player's
-          store pit
-    - operator<<():
-        - Prints out the current board composition
-
-
-Pit.cpp Pit.hpp:
-    - Implements functions for adding and removing seeds from pits
+Board.cpp:
+    - saveSeedsState(): adds all pit seeds to the Snapshot "vector<int>" seeds list
+    - restoreSeedsState(): adds seeds to each of the pits from the Snapshot seeds list

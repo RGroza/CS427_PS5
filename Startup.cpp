@@ -1,9 +1,5 @@
-#include <iostream>
-#include <fstream>
 #include <cstring>
 #include "Startup.hpp"
-#include "Game.hpp"
-#include "tools.hpp"
 
 Startup::Startup(int argc, char* argv[]) : game(0, 0) {
     cout << "Welcome to Kalah!" << endl;
